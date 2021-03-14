@@ -13,10 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ###Attributes of fang_et_al_genotypes.txt
 
-This is an R Markdown document. Markdown 
+This is my R Markdown document to analyze two snp files, combine them and pull out wanted data for further analysis in ggplot2. 
 
-```{r cars}
-summary(fang_et_al_genotypes)
+```{r fang_et_al_genotypes}
+dim(fang_et_al_genotypes)
 ```
 
 
@@ -28,14 +28,23 @@ There are 986 columns in this file.
 
 ###Attributes of snp_position.txt
 
+```{r snp_position}
+dim(snp_position)
+```
+
 By inspecting this file I learned that:
 
 The file size is 38K.
-There are 984 lines, 13198 words and 82763 bytes.
+There are 983 lines, 13198 words and 82763 bytes.
 There are 15 columns in this file.
 
 ##Data processing
 Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR )
+
+```
+head(fang_et_al_genotypes)
+
+```
 
 Put header of the genotype file into its own file for use later
 
@@ -46,7 +55,8 @@ Add headers to both teosinte and maize genotype files
 
 Transpose both genotype files to swap the rows and columns
 
-```t()
+```
+transposed_teosinte_with_header <- t(teosinte_with_header)
 ```
 
 Sort genotpye and snp file based off column 1, "SNP_ID"
