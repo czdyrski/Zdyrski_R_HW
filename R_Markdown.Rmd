@@ -9,19 +9,28 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Data Analysis
+## Data Summary
 
-This 
+###Attributes of fang_et_al_genotypes.txt
+
+This is an R Markdown document. Markdown 
 
 ```{r cars}
-summary(cars)
+summary(fang_et_al_genotypes)
 ```
 
-## Including Plots
+By inspecting this file I learned that:
 
-You can also embed plots, for example:
+The file size is 6.1M.
+There are 2783 lines, 2744038 words and 11051939 bytes.
+There are 986 columns in this file.
+
+###Attributes of snp_position.txt
+
+## ggplot 
+
+Here is my plot
 
 ```{r pressure, echo=FALSE}
 plot(pressure)
 ```
-
