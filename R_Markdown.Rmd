@@ -19,6 +19,7 @@ This is an R Markdown document. Markdown
 summary(fang_et_al_genotypes)
 ```
 
+
 By inspecting this file I learned that:
 
 The file size is 6.1M.
@@ -27,7 +28,70 @@ There are 986 columns in this file.
 
 ###Attributes of snp_position.txt
 
-## ggplot 
+By inspecting this file I learned that:
+
+The file size is 38K.
+There are 984 lines, 13198 words and 82763 bytes.
+There are 15 columns in this file.
+
+##Data processing
+Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR )
+
+Put header of the genotype file into its own file for use later
+
+
+Add headers to both teosinte and maize genotype files
+
+
+
+Transpose both genotype files to swap the rows and columns
+
+```t()
+```
+
+Sort genotpye and snp file based off column 1, "SNP_ID"
+
+
+Sort genotpye and snp file based off column 1, "SNP_ID"
+
+
+Join files together to combine the SNP ID and the genotype
+
+
+###Teosinte Awk out all the 40 files Then use setd to change "?" to "-"
+
+
+
+###Maize Awk out all the 40 files Then use setd to change "?" to "-"
+
+
+###Maize Unknown SNPs
+
+
+Multiple Position SNPs
+
+
+###Teosinte Unknown SNPs
+
+
+Multiple Position SNPs
+
+
+
+
+##ggplot
+
+Load tidyverse
+
+```
+install.packages("tidyverse")
+library(tidyr)
+```
+
+Use pivot longer to neaten up data
+```
+pivot_longer()
+```
 
 Here is my plot
 
