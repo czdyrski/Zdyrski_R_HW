@@ -11,11 +11,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ###Data Summary
 
+# Get two original files
+
+```{r}
+fang_et_al_genotypes <- read.table('https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt', header=TRUE, sep="\t",stringsAsFactors = FALSE)
+
+snp_position <- read.table('https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/main/assignments/UNIX_Assignment/snp_position.txt', header=TRUE, sep="\t", stringsAsFactors = FALSE)
+
+
+```
 #Attributes of fang_et_al_genotypes.txt
 
 This is my R Markdown document to analyze two snp files, combine them and pull out wanted data for further analysis in ggplot2. 
 
-```{r fang_et_al_genotypes}
+```{r}
 dim(fang_et_al_genotypes)
 ```
 
@@ -28,8 +37,9 @@ There are 986 columns in this file.
 
 #Attributes of snp_position.txt
 
-```{r snp_position}
+```{r}
 dim(snp_position)
+file_size(snp_position, unit = "mb")
 ```
 
 By inspecting this file I learned that:
@@ -47,71 +57,75 @@ install.packages("ggplot2")
 library(ggplot2)
 library(tidyr)
 library(tidyverse)
+library(dplyr)
+
 ```
 
-Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR )
+Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR) with grep
 
 ```{r}
 
-transposed_teosinte <- filter(fang_et_al_genotypes, Group %in% c("ZMPBA", "ZMPIL", "ZMPJA")) %>% 
-  select(-JG_OTU, -Group) %>% column_to_rownames(., var = "Sample_ID") %>% 
-  t() %>% as.data.frame() %>% rownames_to_column
-
-transposed_maize <- filter(fang_et_al_genotypes, Group %in% c("ZMMIL", "ZMMLR", "ZMMMR")) %>% 
-  select(-JG_OTU, -Group) %>% column_to_rownames(., var = "Sample_ID") %>% t() %>%
-  as.data.frame() %>% rownames_to_column(., var = "SNP_ID")
-
+teosinte_data <- fang_et_al_genotypes[grep("ZMP", fang_et_al_genotypes$Group), ]
+maize_data <- fang_et_al_genotypes[grep("ZMM", fang_et_al_genotypes$Group), ]
 
 ```
 
-
-```{r}
-teosinte_no_header <- fang_et_al_genotypes[grep("ZMP", fang_et_al_genotypes$Sample_ID), ]
-teosinte_no_header <- fang_et_al_genotypes$ZMP
-
-maize_no_header <- grep("ZMM", fang_et_al_genotypes)
-
-```
-
-Put header of the genotype file into its own file for use later
-
-```{r}
-header_file <- head(fang_et_al_genotypes)
-
-```
-
-Add headers to both teosinte and maize genotype files
-```{r}
-teosinte_with_header <- header_file + teosinte_no_header
-maize_with_header <- header_file + mazie_no_header
-```
 
 Transpose both genotype files to swap the rows and columns
 
 ```{r}
-transposed_teosinte_with_header <- t(teosinte_with_header)
-transposed_maize_with_header <- t(mazie_with_header)
+transposed_teosinte_data <- t(teosinte_data)
+transposed_maize_data <- t(maize_data)
 
 ```
 
-Sort genotpye and snp file based off column 1, "SNP_ID"
+
+Make transposed files from matrix -> dataframe to sort
+
+```{r}
+df_transposed_teosinte_data <- as_tibble(transposed_teosinte_data) 
 
 
-Sort genotpye and snp file based off column 1, "SNP_ID"
+```
+
+Sort
+```{r}
+
+attach(df_transposed_teosinte_data)
+sorted_teosinte_data <- df_transposed_teosinte_data[order(Sample_ID),]
 
 
-Join files together to combine the SNP ID and the genotype
+attach(snp_position)
+sorted_snp_position <- snp_position[order(SNP_ID),]
+```
+
+Merge files (maize/teosinte with snp_position file)
+```{r}
+teosinte_joined <- merge(snp_trimmed, transposed_teosinte_data) %>% 
+  filter(., Position != "multiple",  Chromosome != "unknown")
+
+maize_joined <- merge(snp_trimmed, transposed_maize_data) %>% 
+  filter(., Position != "multiple",  Chromosome != "unknown")
+```
 
 
 ###Teosinte Awk out all the 40 files Then use setd to change "?" to "-"
 
 ```{r}
+teosinte_joined_chromosome_1 <- teosinte_joined %>%
+  filter(Chromosome %in% c("1")) %>%
+  arrange(as.numeric(Position)) %>%
+  write_csv("teosinte_joined_chromosome_1.txt")
 
 ```
 
 ###Maize Awk out all the 40 files Then use setd to change "?" to "-"
 
 ```{r}
+maize_joined_chromosome_1 <- maize_joined %>%
+  filter(Chromosome %in% c("1")) %>%
+  arrange(as.numeric(Position)) %>%
+  write_csv("maize_joined_chromosome_1.txt")
 
 ```
 
