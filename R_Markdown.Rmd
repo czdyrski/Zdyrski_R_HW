@@ -148,9 +148,15 @@ teosinte_chrom_10.txt <- teosinte_joined[grep("10", teosinte_joined$Chromosome),
 teosinte_chrom_1_hyphen.txt <- teosinte_chrom_1.txt
 
 
-teosinte_chrom_1_hyphen.txt <- gsub("C/C", "-/-", teosinte_chrom_1_hyphen.txt)
 
+ncol(teosinte_chrom_1_hyphen.txt)
+teosinte_chrom_1_hyphen.txt <- apply(teosinte_chrom_1_hyphen.txt[,4:978], 2, function(teosinte_chrom_1_hyphen.txt) gsub("\\?", "-", teosinte_chrom_1_hyphen.txt))
 
+teosinte_chrom_1_hyphen.txt <- paste(teosinte_chrom_1.txt[1:3], teosinte_chrom_1_hyphen.txt[4:978])
+
+teosinte_chrom_1.txt_three_col <- teosinte_chrom_1.txt[1:3]
+
+teosinte_chrom_1_hyphen.txt <- c(teosinte_chrom_1.txt_three_col, teosinte_chrom_1_hyphen.txt)
 
 ```
 
