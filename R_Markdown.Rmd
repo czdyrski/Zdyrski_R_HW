@@ -53,10 +53,12 @@ file.size(snp_position, unit = "mb")
 ```{r}
 install.packages("tidyverse")
 install.packages("ggplot2")
+install.packages("stringr")
 library(ggplot2)
 library(tidyr)
 library(tidyverse)
 library(dplyr)
+library(stringr)
 
 ```
 
@@ -70,9 +72,12 @@ maize_data <- fang_et_al_genotypes[grep("ZMM", fang_et_al_genotypes$Group), ]
 
 teosinte_data_excluding_col <- select(teosinte_data, -JG_OTU, -Group)
 
-teosinte_data_excluding_col <- as.data.frame(teosinte_data_excluding_col)
+teosinte_data_excluding_col <- as_tibble(teosinte_data_excluding_col)
 
-maizee_data_excluding_col <- select(maize_data, -JG_OTU, -Group)
+maize_data_excluding_col <- select(maize_data, -JG_OTU, -Group)
+
+maize_data_excluding_col <- as_tibble(maize_data_excluding_col)
+
 ```
 
 #Swap names
@@ -81,38 +86,27 @@ maizee_data_excluding_col <- select(maize_data, -JG_OTU, -Group)
 
 swap_teosinte_data_excluding_col <- column_to_rownames(teosinte_data_excluding_col, var="Sample_ID")
 
-maizee_data_excluding_col <- select(maize_data, -JG_OTU, -Group)
+swap_maize_data_excluding_col <- column_to_rownames(maize_data_excluding_col, var="Sample_ID")
 ```
-
-
-
-
-
-
-
-
 
 
 #Transpose both genotype files to swap the rows and columns
 
 ```{r}
-transposed_maize_data <- setNames(data.frame(t(maize_data[-1])), maize_data[,1])
 
-transposed_teosinte_data <- t(teosinte_data)
-transposed_maize_data <- t(maize_data)
+transposed_teosinte_data <- t(swap_teosinte_data_excluding_col)
+transposed_maize_data <- t(swap_maize_data_excluding_col)
+
+
+transposed_teosinte_data <- rownames_to_column(as.data.frame(transposed_teosinte_data), var = "SNP_ID")
+transposed_maize_data <- rownames_to_column(as.data.frame(transposed_maize_data), var = "SNP_ID")
 
 ```
 
 
-#Make transposed files from matrix -> dataframe to sort
-
-
-###df_transposed_teosinte_data <- as_tibble(transposed_teosinte_data) 
-
-
 #Crop and Sort snp file
 ```{r}
-snp_cropped <- snp_position %>% select(SNP_ID, Chromosome, Position)
+snp_cropped <- select(snp_position, SNP_ID, Chromosome, Position)
 
 attach(snp_cropped)
 sorted_snp_position <- snp_cropped[order(SNP_ID),]
@@ -122,50 +116,67 @@ sorted_snp_position <- snp_cropped[order(SNP_ID),]
 ```{r}
 teosinte_joined <- merge(sorted_snp_position, transposed_teosinte_data, by="SNP_ID")
 
-teosinte_joined_filtered <- filter(teosinte_joined, Position != "multiple",  Chromosome != "unknown")
+maize_joined <- merge(sorted_snp_position, transposed_maize_data, by="SNP_ID")
 
-maize_joined <- merge(sorted_snp_position, transposed_maize_data) %>% 
-  filter(., Position != "multiple",  Chromosome != "unknown")
 ```
+
+
+
 
 ###Teosinte Awk out all the 20 files
 ```{r}
-teosinte_joined_chromosome_1 <- teosinte_joined %>%
-  filter(Chromosome %in% c("1")) %>%
-  arrange(as.numeric(Position)) %>%
-  write_csv("teosinte_joined_chromosome_1.txt")
+
+teosinte_chrom_1.txt <- teosinte_joined[grep("1$", teosinte_joined$Chromosome), ]
+teosinte_chrom_2.txt <- teosinte_joined[grep("2$", teosinte_joined$Chromosome), ]
+teosinte_chrom_3.txt <- teosinte_joined[grep("3$", teosinte_joined$Chromosome), ]
+teosinte_chrom_4.txt <- teosinte_joined[grep("4$", teosinte_joined$Chromosome), ]
+teosinte_chrom_5.txt <- teosinte_joined[grep("5$", teosinte_joined$Chromosome), ]
+teosinte_chrom_6.txt <- teosinte_joined[grep("6$", teosinte_joined$Chromosome), ]
+teosinte_chrom_7.txt <- teosinte_joined[grep("7$", teosinte_joined$Chromosome), ]
+teosinte_chrom_8.txt <- teosinte_joined[grep("8$", teosinte_joined$Chromosome), ]
+teosinte_chrom_9.txt <- teosinte_joined[grep("9$", teosinte_joined$Chromosome), ]
+teosinte_chrom_10.txt <- teosinte_joined[grep("10", teosinte_joined$Chromosome), ]
+
 
 ```
+
+
 
 ###Teosinte Awk out 20 files Then use setd to change "?" to "-"
 ```{r}
-teosinte_joined_chromosome_1_hyphen <- teosinte_joined %>%
-  filter(Chromosome %in% c("1")) %>%
-  arrange(as.numeric(Position)) %>%
-  write_csv("teosinte_joined_chromosome_1_hyphen.txt")
+
+teosinte_chrom_1_hyphen.txt <- teosinte_chrom_1.txt
 
 
-teosinte_joined_chromosome_1_hyphen.txt <- str_replace(teosinte_joined_chromosome_1_hyphen.txt, "?", "-")
+teosinte_chrom_1_hyphen.txt <- gsub("C/C", "-/-", teosinte_chrom_1_hyphen.txt)
+
+
 
 ```
 
+
+
 ###Maize Awk out all the 20 files
 ```{r}
-maize_joined_chromosome_1 <- maize_joined %>%
-  filter(Chromosome %in% c("1")) %>%
-  arrange(as.numeric(Position)) %>%
-  write_csv("maize_joined_chromosome_1.txt")
+maize_chrom_1.txt <- maize_joined[grep("1$", maize_joined$Chromosome), ]
+maize_chrom_2.txt <- maize_joined[grep("2$", maize_joined$Chromosome), ]
+maize_chrom_3.txt <- maize_joined[grep("3$", maize_joined$Chromosome), ]
+maize_chrom_4.txt <- maize_joined[grep("4$", maize_joined$Chromosome), ]
+maize_chrom_5.txt <- maize_joined[grep("5$", maize_joined$Chromosome), ]
+maize_chrom_6.txt <- maize_joined[grep("6$", maize_joined$Chromosome), ]
+maize_chrom_7.txt <- maize_joined[grep("7$", maize_joined$Chromosome), ]
+maize_chrom_8.txt <- maize_joined[grep("8$", maize_joined$Chromosome), ]
+maize_chrom_9.txt <- maize_joined[grep("9$", maize_joined$Chromosome), ]
+maize_chrom_10.txt <- maize_joined[grep("10", maize_joined$Chromosome), ]
 
 ```
 
 ###Maize Awk out all the 20 files Then use setd to change "?" to "-"
 ```{r}
-maize_joined_chromosome_1_hyphen <- maize_joined %>%
-  filter(Chromosome %in% c("1")) %>%
-  arrange(as.numeric(Position)) %>%
-  write_csv("maize_joined_chromosome_1_hyphen.txt")
+maize_chrom_1_hyphen.txt <- gsub("A", "B", maize_chrom_1.txt, ignore.case=FALSE, extended=TRUE) 
 
-maize_joined_chromosome_1_hyphen.txt <- str_replace(mazie_joined_chromosome_1_hyphen.txt, "?", "-")
+maize_chrom_1_hyphen.txt <- maize_chrom_1.txt[maize_chrom_1.txt=="A"] <- "B"
+maize_chrom_1_hyphen.txt <- as.data.frame(maize_chrom_1_hyphen.txt)
 
 ```
 
