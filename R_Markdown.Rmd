@@ -137,30 +137,99 @@ teosinte_chrom_8.txt <- teosinte_joined[grep("8$", teosinte_joined$Chromosome), 
 teosinte_chrom_9.txt <- teosinte_joined[grep("9$", teosinte_joined$Chromosome), ]
 teosinte_chrom_10.txt <- teosinte_joined[grep("10", teosinte_joined$Chromosome), ]
 
-
 ```
 
 
 
-###Teosinte Awk out 20 files Then use setd to change "?" to "-"
+###Teosinte make 2 files, one with the 3 headers, and another to gsub out the "?" then cbind them together
 ```{r}
-
 teosinte_chrom_1_hyphen.txt <- teosinte_chrom_1.txt
-
-
-
 ncol(teosinte_chrom_1_hyphen.txt)
 teosinte_chrom_1_hyphen.txt <- apply(teosinte_chrom_1_hyphen.txt[,4:978], 2, function(teosinte_chrom_1_hyphen.txt) gsub("\\?", "-", teosinte_chrom_1_hyphen.txt))
 
-teosinte_chrom_1_hyphen.txt <- paste(teosinte_chrom_1.txt[1:3], teosinte_chrom_1_hyphen.txt[4:978])
-
 teosinte_chrom_1.txt_three_col <- teosinte_chrom_1.txt[1:3]
+teosinte_chrom_1_hyphen.txt <- cbind(teosinte_chrom_1.txt_three_col, teosinte_chrom_1_hyphen.txt)
+```
+```{r}
+teosinte_chrom_2_hyphen.txt <- teosinte_chrom_2.txt
+ncol(teosinte_chrom_2_hyphen.txt)
+teosinte_chrom_2_hyphen.txt <- apply(teosinte_chrom_2_hyphen.txt[,4:978], 2, function(teosinte_chrom_2_hyphen.txt) gsub("\\?", "-", teosinte_chrom_2_hyphen.txt))
 
-teosinte_chrom_1_hyphen.txt <- c(teosinte_chrom_1.txt_three_col, teosinte_chrom_1_hyphen.txt)
-
+teosinte_chrom_2.txt_three_col <- teosinte_chrom_2.txt[1:3]
+teosinte_chrom_2_hyphen.txt <- cbind(teosinte_chrom_2.txt_three_col, teosinte_chrom_2_hyphen.txt)
 ```
 
+```{r}
+teosinte_chrom_3_hyphen.txt <- teosinte_chrom_3.txt
+ncol(teosinte_chrom_3_hyphen.txt)
+teosinte_chrom_3_hyphen.txt <- apply(teosinte_chrom_3_hyphen.txt[,4:978], 2, function(teosinte_chrom_3_hyphen.txt) gsub("\\?", "-", teosinte_chrom_3_hyphen.txt))
 
+teosinte_chrom_3.txt_three_col <- teosinte_chrom_3.txt[1:3]
+teosinte_chrom_1_hyphen.txt <- cbind(teosinte_chrom_1.txt_three_col, teosinte_chrom_1_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_4_hyphen.txt <- teosinte_chrom_4.txt
+ncol(teosinte_chrom_4_hyphen.txt)
+teosinte_chrom_4_hyphen.txt <- apply(teosinte_chrom_4_hyphen.txt[,4:978], 2, function(teosinte_chrom_4_hyphen.txt) gsub("\\?", "-", teosinte_chrom_4_hyphen.txt))
+
+teosinte_chrom_4.txt_three_col <- teosinte_chrom_4.txt[1:3]
+teosinte_chrom_4_hyphen.txt <- cbind(teosinte_chrom_4.txt_three_col, teosinte_chrom_4_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_5_hyphen.txt <- teosinte_chrom_5.txt
+ncol(teosinte_chrom_5_hyphen.txt)
+teosinte_chrom_5_hyphen.txt <- apply(teosinte_chrom_5_hyphen.txt[,4:978], 2, function(teosinte_chrom_5_hyphen.txt) gsub("\\?", "-", teosinte_chrom_5_hyphen.txt))
+
+teosinte_chrom_5.txt_three_col <- teosinte_chrom_5.txt[1:3]
+teosinte_chrom_5_hyphen.txt <- cbind(teosinte_chrom_5.txt_three_col, teosinte_chrom_5_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_6_hyphen.txt <- teosinte_chrom_6.txt
+ncol(teosinte_chrom_6_hyphen.txt)
+teosinte_chrom_6_hyphen.txt <- apply(teosinte_chrom_6_hyphen.txt[,4:978], 2, function(teosinte_chrom_6_hyphen.txt) gsub("\\?", "-", teosinte_chrom_6_hyphen.txt))
+
+teosinte_chrom_6.txt_three_col <- teosinte_chrom_6.txt[1:3]
+teosinte_chrom_6_hyphen.txt <- cbind(teosinte_chrom_6.txt_three_col, teosinte_chrom_6_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_7_hyphen.txt <- teosinte_chrom_7.txt
+ncol(teosinte_chrom_7_hyphen.txt)
+teosinte_chrom_7_hyphen.txt <- apply(teosinte_chrom_7_hyphen.txt[,4:978], 2, function(teosinte_chrom_7_hyphen.txt) gsub("\\?", "-", teosinte_chrom_7_hyphen.txt))
+
+teosinte_chrom_7.txt_three_col <- teosinte_chrom_7.txt[1:3]
+teosinte_chrom_7_hyphen.txt <- cbind(teosinte_chrom_7.txt_three_col, teosinte_chrom_7_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_8_hyphen.txt <- teosinte_chrom_8.txt
+ncol(teosinte_chrom_8_hyphen.txt)
+teosinte_chrom_8_hyphen.txt <- apply(teosinte_chrom_8_hyphen.txt[,4:978], 2, function(teosinte_chrom_8_hyphen.txt) gsub("\\?", "-", teosinte_chrom_8_hyphen.txt))
+
+teosinte_chrom_8.txt_three_col <- teosinte_chrom_8.txt[1:3]
+teosinte_chrom_8_hyphen.txt <- cbind(teosinte_chrom_8.txt_three_col, teosinte_chrom_8_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_9_hyphen.txt <- teosinte_chrom_9.txt
+ncol(teosinte_chrom_9_hyphen.txt)
+teosinte_chrom_9_hyphen.txt <- apply(teosinte_chrom_9_hyphen.txt[,4:978], 2, function(teosinte_chrom_9_hyphen.txt) gsub("\\?", "-", teosinte_chrom_9_hyphen.txt))
+
+teosinte_chrom_9.txt_three_col <- teosinte_chrom_9.txt[1:3]
+teosinte_chrom_9_hyphen.txt <- cbind(teosinte_chrom_9.txt_three_col, teosinte_chrom_9_hyphen.txt)
+```
+
+```{r}
+teosinte_chrom_10_hyphen.txt <- teosinte_chrom_10.txt
+ncol(teosinte_chrom_10_hyphen.txt)
+teosinte_chrom_10_hyphen.txt <- apply(teosinte_chrom_10_hyphen.txt[,4:978], 2, function(teosinte_chrom_10_hyphen.txt) gsub("\\?", "-", teosinte_chrom_10_hyphen.txt))
+
+teosinte_chrom_10.txt_three_col <- teosinte_chrom_10.txt[1:3]
+teosinte_chrom_10_hyphen.txt <- cbind(teosinte_chrom_10.txt_three_col, teosinte_chrom_10_hyphen.txt)
+```
 
 ###Maize Awk out all the 20 files
 ```{r}
@@ -177,14 +246,96 @@ maize_chrom_10.txt <- maize_joined[grep("10", maize_joined$Chromosome), ]
 
 ```
 
-###Maize Awk out all the 20 files Then use setd to change "?" to "-"
+###maize make 2 files, one with the 3 headers, and another to gsub out the "?" then cbind them together
 ```{r}
-maize_chrom_1_hyphen.txt <- gsub("A", "B", maize_chrom_1.txt, ignore.case=FALSE, extended=TRUE) 
+maize_chrom_1_hyphen.txt <- maize_chrom_1.txt
+ncol(maize_chrom_1_hyphen.txt)
+maize_chrom_1_hyphen.txt <- apply(maize_chrom_1_hyphen.txt[,4:978], 2, function(maize_chrom_1_hyphen.txt) gsub("\\?", "-", maize_chrom_1_hyphen.txt))
 
-maize_chrom_1_hyphen.txt <- maize_chrom_1.txt[maize_chrom_1.txt=="A"] <- "B"
-maize_chrom_1_hyphen.txt <- as.data.frame(maize_chrom_1_hyphen.txt)
-
+maize_chrom_1.txt_three_col <- maize_chrom_1.txt[1:3]
+maize_chrom_1_hyphen.txt <- cbind(maize_chrom_1.txt_three_col, maize_chrom_1_hyphen.txt)
 ```
+```{r}
+maize_chrom_2_hyphen.txt <- maize_chrom_2.txt
+ncol(maize_chrom_2_hyphen.txt)
+maize_chrom_2_hyphen.txt <- apply(maize_chrom_2_hyphen.txt[,4:978], 2, function(maize_chrom_2_hyphen.txt) gsub("\\?", "-", maize_chrom_2_hyphen.txt))
+
+maize_chrom_2.txt_three_col <- maize_chrom_2.txt[1:3]
+maize_chrom_2_hyphen.txt <- cbind(maize_chrom_2.txt_three_col, maize_chrom_2_hyphen.txt)
+```
+
+```{r}
+maize_chrom_3_hyphen.txt <- maize_chrom_3.txt
+ncol(maize_chrom_3_hyphen.txt)
+maize_chrom_3_hyphen.txt <- apply(maize_chrom_3_hyphen.txt[,4:978], 2, function(maize_chrom_3_hyphen.txt) gsub("\\?", "-", maize_chrom_3_hyphen.txt))
+
+maize_chrom_3.txt_three_col <- maize_chrom_3.txt[1:3]
+maize_chrom_1_hyphen.txt <- cbind(maize_chrom_1.txt_three_col, maize_chrom_1_hyphen.txt)
+```
+
+```{r}
+maize_chrom_4_hyphen.txt <- maize_chrom_4.txt
+ncol(maize_chrom_4_hyphen.txt)
+maize_chrom_4_hyphen.txt <- apply(maize_chrom_4_hyphen.txt[,4:978], 2, function(maize_chrom_4_hyphen.txt) gsub("\\?", "-", maize_chrom_4_hyphen.txt))
+
+maize_chrom_4.txt_three_col <- maize_chrom_4.txt[1:3]
+maize_chrom_4_hyphen.txt <- cbind(maize_chrom_4.txt_three_col, maize_chrom_4_hyphen.txt)
+```
+
+```{r}
+maize_chrom_5_hyphen.txt <- maize_chrom_5.txt
+ncol(maize_chrom_5_hyphen.txt)
+maize_chrom_5_hyphen.txt <- apply(maize_chrom_5_hyphen.txt[,4:978], 2, function(maize_chrom_5_hyphen.txt) gsub("\\?", "-", maize_chrom_5_hyphen.txt))
+
+maize_chrom_5.txt_three_col <- maize_chrom_5.txt[1:3]
+maize_chrom_5_hyphen.txt <- cbind(maize_chrom_5.txt_three_col, maize_chrom_5_hyphen.txt)
+```
+
+```{r}
+maize_chrom_6_hyphen.txt <- maize_chrom_6.txt
+ncol(maize_chrom_6_hyphen.txt)
+maize_chrom_6_hyphen.txt <- apply(maize_chrom_6_hyphen.txt[,4:978], 2, function(maize_chrom_6_hyphen.txt) gsub("\\?", "-", maize_chrom_6_hyphen.txt))
+
+maize_chrom_6.txt_three_col <- maize_chrom_6.txt[1:3]
+maize_chrom_6_hyphen.txt <- cbind(maize_chrom_6.txt_three_col, maize_chrom_6_hyphen.txt)
+```
+
+```{r}
+maize_chrom_7_hyphen.txt <- maize_chrom_7.txt
+ncol(maize_chrom_7_hyphen.txt)
+maize_chrom_7_hyphen.txt <- apply(maize_chrom_7_hyphen.txt[,4:978], 2, function(maize_chrom_7_hyphen.txt) gsub("\\?", "-", maize_chrom_7_hyphen.txt))
+
+maize_chrom_7.txt_three_col <- maize_chrom_7.txt[1:3]
+maize_chrom_7_hyphen.txt <- cbind(maize_chrom_7.txt_three_col, maize_chrom_7_hyphen.txt)
+```
+
+```{r}
+maize_chrom_8_hyphen.txt <- maize_chrom_8.txt
+ncol(maize_chrom_8_hyphen.txt)
+maize_chrom_8_hyphen.txt <- apply(maize_chrom_8_hyphen.txt[,4:978], 2, function(maize_chrom_8_hyphen.txt) gsub("\\?", "-", maize_chrom_8_hyphen.txt))
+
+maize_chrom_8.txt_three_col <- maize_chrom_8.txt[1:3]
+maize_chrom_8_hyphen.txt <- cbind(maize_chrom_8.txt_three_col, maize_chrom_8_hyphen.txt)
+```
+
+```{r}
+maize_chrom_9_hyphen.txt <- maize_chrom_9.txt
+ncol(maize_chrom_9_hyphen.txt)
+maize_chrom_9_hyphen.txt <- apply(maize_chrom_9_hyphen.txt[,4:978], 2, function(maize_chrom_9_hyphen.txt) gsub("\\?", "-", maize_chrom_9_hyphen.txt))
+
+maize_chrom_9.txt_three_col <- maize_chrom_9.txt[1:3]
+maize_chrom_9_hyphen.txt <- cbind(maize_chrom_9.txt_three_col, maize_chrom_9_hyphen.txt)
+```
+
+```{r}
+maize_chrom_10_hyphen.txt <- maize_chrom_10.txt
+ncol(maize_chrom_10_hyphen.txt)
+maize_chrom_10_hyphen.txt <- apply(maize_chrom_10_hyphen.txt[,4:978], 2, function(maize_chrom_10_hyphen.txt) gsub("\\?", "-", maize_chrom_10_hyphen.txt))
+
+maize_chrom_10.txt_three_col <- maize_chrom_10.txt[1:3]
+maize_chrom_10_hyphen.txt <- cbind(maize_chrom_10.txt_three_col, maize_chrom_10_hyphen.txt)
+```
+
 
 ###Maize Unknown SNPs
 Multiple Position SNPs
