@@ -10,8 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ###Data Summary
-
-# Get two original files
+Get two original files
 
 ```{r}
 fang_et_al_genotypes <- read.table('https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2021/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt', header=TRUE, sep="\t",stringsAsFactors = FALSE)
@@ -20,37 +19,37 @@ snp_position <- read.table('https://raw.githubusercontent.com/EEOB-BioData/BCB54
 
 
 ```
-#Attributes of fang_et_al_genotypes.txt
+###Attributes of fang_et_al_genotypes.txt
 
-This is my R Markdown document to analyze two snp files, combine them and pull out wanted data for further analysis in ggplot2. 
+#This is my R Markdown document to analyze two snp files, combine them and pull out wanted data for further analysis in ggplot2. 
 
 ```{r}
 dim(fang_et_al_genotypes)
 ```
 
 
-By inspecting this file I learned that:
+#By inspecting this file I learned that:
 
-The file size is 6.1M.
-There are 2783 lines, 2744038 words and 11051939 bytes.
-There are 986 columns in this file.
+#The file size is 6.1M.
+#There are 2783 lines, 2744038 words and 11051939 bytes.
+#There are 986 columns in this file.
 
-#Attributes of snp_position.txt
+###Attributes of snp_position.txt
 
 ```{r}
 dim(snp_position)
-file_size(snp_position, unit = "mb")
+file.size(snp_position, unit = "mb")
 ```
 
-By inspecting this file I learned that:
+#By inspecting this file I learned that:
 
-The file size is 38K.
-There are 983 lines, 13198 words and 82763 bytes.
-There are 15 columns in this file.
+#The file size is 38K.
+#There are 983 lines, 13198 words and 82763 bytes.
+#There are 15 columns in this file.
 
 ###Data processing
 
- # Install & load packages
+#Install & load packages
 ```{r}
 install.packages("tidyverse")
 install.packages("ggplot2")
@@ -61,56 +60,75 @@ library(dplyr)
 
 ```
 
-Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR) with grep
+#Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR) with grep, and also get rid of column two and three 
 
 ```{r}
 
 teosinte_data <- fang_et_al_genotypes[grep("ZMP", fang_et_al_genotypes$Group), ]
 maize_data <- fang_et_al_genotypes[grep("ZMM", fang_et_al_genotypes$Group), ]
 
+
+teosinte_data_excluding_col <- select(teosinte_data, -JG_OTU, -Group)
+
+teosinte_data_excluding_col <- as.data.frame(teosinte_data_excluding_col)
+
+maizee_data_excluding_col <- select(maize_data, -JG_OTU, -Group)
+```
+
+#Swap names
+
+```{r}
+
+swap_teosinte_data_excluding_col <- column_to_rownames(teosinte_data_excluding_col, var="Sample_ID")
+
+maizee_data_excluding_col <- select(maize_data, -JG_OTU, -Group)
 ```
 
 
-Transpose both genotype files to swap the rows and columns
+
+
+
+
+
+
+
+
+#Transpose both genotype files to swap the rows and columns
 
 ```{r}
+transposed_maize_data <- setNames(data.frame(t(maize_data[-1])), maize_data[,1])
+
 transposed_teosinte_data <- t(teosinte_data)
 transposed_maize_data <- t(maize_data)
 
 ```
 
 
-Make transposed files from matrix -> dataframe to sort
+#Make transposed files from matrix -> dataframe to sort
 
+
+###df_transposed_teosinte_data <- as_tibble(transposed_teosinte_data) 
+
+
+#Crop and Sort snp file
 ```{r}
-df_transposed_teosinte_data <- as_tibble(transposed_teosinte_data) 
+snp_cropped <- snp_position %>% select(SNP_ID, Chromosome, Position)
 
-
+attach(snp_cropped)
+sorted_snp_position <- snp_cropped[order(SNP_ID),]
 ```
 
-Sort
+#Merge files (maize/teosinte with snp_position file)
 ```{r}
+teosinte_joined <- merge(sorted_snp_position, transposed_teosinte_data, by="SNP_ID")
 
-attach(df_transposed_teosinte_data)
-sorted_teosinte_data <- df_transposed_teosinte_data[order(Sample_ID),]
+teosinte_joined_filtered <- filter(teosinte_joined, Position != "multiple",  Chromosome != "unknown")
 
-
-attach(snp_position)
-sorted_snp_position <- snp_position[order(SNP_ID),]
-```
-
-Merge files (maize/teosinte with snp_position file)
-```{r}
-teosinte_joined <- merge(snp_trimmed, transposed_teosinte_data) %>% 
-  filter(., Position != "multiple",  Chromosome != "unknown")
-
-maize_joined <- merge(snp_trimmed, transposed_maize_data) %>% 
+maize_joined <- merge(sorted_snp_position, transposed_maize_data) %>% 
   filter(., Position != "multiple",  Chromosome != "unknown")
 ```
 
-
-###Teosinte Awk out all the 40 files Then use setd to change "?" to "-"
-
+###Teosinte Awk out all the 20 files
 ```{r}
 teosinte_joined_chromosome_1 <- teosinte_joined %>%
   filter(Chromosome %in% c("1")) %>%
@@ -119,13 +137,35 @@ teosinte_joined_chromosome_1 <- teosinte_joined %>%
 
 ```
 
-###Maize Awk out all the 40 files Then use setd to change "?" to "-"
+###Teosinte Awk out 20 files Then use setd to change "?" to "-"
+```{r}
+teosinte_joined_chromosome_1_hyphen <- teosinte_joined %>%
+  filter(Chromosome %in% c("1")) %>%
+  arrange(as.numeric(Position)) %>%
+  write_csv("teosinte_joined_chromosome_1_hyphen.txt")
 
+
+teosinte_joined_chromosome_1_hyphen.txt <- str_replace(teosinte_joined_chromosome_1_hyphen.txt, "?", "-")
+
+```
+
+###Maize Awk out all the 20 files
 ```{r}
 maize_joined_chromosome_1 <- maize_joined %>%
   filter(Chromosome %in% c("1")) %>%
   arrange(as.numeric(Position)) %>%
   write_csv("maize_joined_chromosome_1.txt")
+
+```
+
+###Maize Awk out all the 20 files Then use setd to change "?" to "-"
+```{r}
+maize_joined_chromosome_1_hyphen <- maize_joined %>%
+  filter(Chromosome %in% c("1")) %>%
+  arrange(as.numeric(Position)) %>%
+  write_csv("maize_joined_chromosome_1_hyphen.txt")
+
+maize_joined_chromosome_1_hyphen.txt <- str_replace(mazie_joined_chromosome_1_hyphen.txt, "?", "-")
 
 ```
 
@@ -144,15 +184,14 @@ Multiple Position SNPs
 
 
 ##ggplot step
-Use pivot longer to neaten up data for ggplot input
+#Use pivot longer to neaten up data for ggplot input
 
 ```{r}
 pivot_longer()
 
 ```
 
-Here is my plot
-
+#Here is my plot
 ```{r}
 ggplot()
 
