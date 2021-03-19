@@ -361,6 +361,7 @@ Multiple Position SNPs
 
 ##ggplot step
 #Use pivot longer to neaten up data for ggplot input
+##chromosome of teosinte
 
 ```{r}
 teosinte_joined_plot <- pivot_longer(teosinte_joined, Chromosome)
@@ -368,14 +369,39 @@ teosinte_joined_plot <- pivot_longer(teosinte_joined, Chromosome)
 teosinte_joined_plot_numeric <- transform(teosinte_joined_plot, Chromosome=as.numeric(Chromosome), Position=as.numeric(Position))
 
 ggplot(teosinte_joined_plot_numeric) +
-  geom_point(aes(Chromosome, SNP_ID)) +
+  geom_point(aes(Chromosome, Position)) +
   theme(axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 
 ```
 
+##chromosome of maize
+
+```{r}
+maize_joined_plot <- pivot_longer(maize_joined, Chromosome)
+
+maize_joined_plot_numeric <- transform(maize_joined_plot, Chromosome=as.numeric(Chromosome), Position=as.numeric(Position))
+
+ggplot(maize_joined_plot_numeric) +
+  geom_point(aes(Chromosome, Position)) +
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+```
+
+##chromosome snp position
+
+```{r}
+snp_position %>%
+  select(SNP_ID, Chromosome, Position) %>%
+  drop_na() %>%
+  ggplot() + 
+  geom_bar(aes(x=Chromosome))
+
+```
+
 ##ggplot step
-#Use pivot longer to neaten up data for ggplot input
+##homozygous and heterogygous file making
 
 ```{r}
 homo_heto_teosinte_joined_plot_numeric <- teosinte_joined_plot_numeric %>% 
@@ -417,8 +443,11 @@ homo_heto_maize_joined_plot_numeric <- maize_joined_plot_numeric %>%
 ```
 
 
-#Here is my plot
+#Here is my plot looking at presence absense of amplicons across the genome
 ```{r}
-ggplot()
+snp_position %>%
+  select(Position, count_amplicons) %>%
+  ggplot() + 
+  geom_point(aes(Position, count_amplicons))
 
 ```
