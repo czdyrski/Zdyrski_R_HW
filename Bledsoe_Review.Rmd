@@ -1,0 +1,51 @@
+---
+title: "Bledsoe_review"
+author: "Molly Bledsoe"
+date: "3/21/2021"
+output: html_document
+---
+## Inspecting files
+
+I see that you used the dim() command to inspect the files, but what are the other commands you used to get the information you found? 
+
+your "file.size(snp_position, unit = "mb")" left with an error stating "Error in file.info(..., extra_cols = FALSE) : invalid filename argument". 
+
+## Analyzing files
+
+Looking at your completed files (for ex, maize_chrom_#_hyphen.txt), some of them have the SNPs and, Chromosome number and position columns cut out. (you can see in maize_chrom_3_hyphen.txt) The positions are also not in descending order and I don't see the increasing ordered files are. I organized mine with the arrange(filename, column) command and arrange(filename,desc(column)) for the descending order. 
+
+Under "###Maize Unknown SNPs" and "###Teosinte Unknown SNPs" you don't have a code written there. I'm guessing it's to pull out the unknown SNPs from your data, I assume you could also use the grep command to pull them out. 
+
+And then making the organized files into text files (to make the 40 files) you could use write.table(file_name, file = "what_you_want_to_name_file.txt", sep = "_")
+
+## ggplot sections
+
+I wasn't sure from the instructions when he says "original data" if that was the fang file or the maize/teosinte files. Either way I think your graphs look pretty good, I'd recommend adding titles so people know what they are looking at. 
+
+There's no plot for the missing data and amount of heterozygosity. 
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
