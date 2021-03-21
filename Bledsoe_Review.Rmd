@@ -16,6 +16,8 @@ Looking at your completed files (for ex, maize_chrom_#_hyphen.txt), some of them
 
 Under "###Maize Unknown SNPs" and "###Teosinte Unknown SNPs" you don't have a code written there. I'm guessing it's to pull out the unknown SNPs from your data, I assume you could also use the grep command to pull them out. 
 
+And then making the organized files into text files (to make the 40 files) you could use write.table(file_name, file = "what_you_want_to_name_file.txt", sep = "_")
+
 ## ggplot sections
 
 I wasn't sure from the instructions when he says "original data" if that was the fang file or the maize/teosinte files. Either way I think your graphs look pretty good, I'd recommend adding titles so people know what they are looking at. 
