@@ -1,0 +1,32 @@
+---
+title: "Roghair_Review_for_Zyderski"
+author: "Marissa Roghair Stroud"
+date: "3/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## General Comments
+
+* I like how you imported the two files from the github repository instead of off your local machine. I didn't do that with my assignment, but I'm considering it now because it makes the data easier to find and the analysis more reproducible
+* You don't need to call ggplot, tidyr, dplyr, etc. into your environment individually. Running `library(tidyverse)` puts all 8 of the tidyverse packages in your environment at once and will save you a few steps. 
+
+## Data analysis comments
+
+* I couldn't get your `file.info` command to run. It looks like it's from an older version of R, so I might update your versions of R and R Studio and find a different command that serves the same role. I used `object.size` instead. 
+* One nice thing about R is that you actually don't need to sort your files before merging them. Running a sort command can actually slow down your analysis significantly, depending on file size. 
+* You could remove a lot of lines of code from your analysis if changed the order you're running commands in. You currently have nearly 100 lines of code each for sorting maize and teosinte data in decreasing order and changing out "?/?" for "-/-", but could cut that down to just 12 lines if you just changed the order you were running the commands in. Run the gsub command first, then sort, then use the grep command to pull out files for each of the 10 chromosomes. 
+
+## Graphing comments
+
+* Make sure to include titles and properly label your graphs. 
+* You set up the data with its heterozygous/homozygous information but didn't have a graph. You need a graph of heterozygosity for each maize and teosinte, plus two more with the information split out by group.
+* I might reconsider your last plot. All I can see are two horizontal lines, one at 1 and one at 0, which isn't very informative. I'd reconsider what you're plotting here - maybe try using something from Column 8, which tells what gene the SNP lies within?
+
+## Overall
+
+I think you did a nice job with the assignment so far. If you just make a few small adjustments to your code, you can streamline the analysis quite a bit. It's a good start!
+
