@@ -51,12 +51,15 @@ object.size(snp_position)
 
 ###Data processing
 
-#Install & load tidyverse packages
+#Install tidyverse package
 ```{r}
 install.packages("tidyverse")
-library(tidyverse)
 ```
 
+#Load tidyverse package
+```{r}
+library(tidyverse)
+```
 
 #Seperate out teosinte (ZMPBA, ZMPIL, and ZMPJA) and maize (ZMMIL OR ZMMLR OR ZMMMR) with grep, and also get rid of column two and three, format correctly with tibble command
 ```{r}
